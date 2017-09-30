@@ -190,12 +190,8 @@ object JSONBatchCommands
   }
 
   implicit object InsertWriter extends pack.Writer[ResolvedInsert] {
-    def writes(cmd: ResolvedInsert): pack.Document = Json.obj(
-      "insert" -> cmd.collection,
-      "documents" -> cmd.command.documents,
-      "ordered" -> cmd.command.ordered,
-      "writeConcern" -> cmd.command.writeConcern
-    )
+    def writes(cmd: ResolvedInsert): pack.Document =
+      JSONInsertCommand.serialize(cmd)
   }
 
   object JSONUpdateCommand extends UC[JSONSerializationPack.type] {
@@ -508,6 +504,7 @@ object Helpers {
    * @param wc the write concern
    */
   @deprecated("Use `bulkInsert` without `bulkSize` and `bulkByteSize` (resolved from the metadata)", "0.12.7")
+  @SuppressWarnings(Array("UnusedMethodParameter"))
   def bulkInsert(collection: JSONCollection, documents: => InputStream, ordered: Boolean, bulkSize: Int, bulkByteSize: Int)(implicit ec: ExecutionContext, wc: WriteConcern): Future[MultiBulkWriteResult] =
     documentProducer(collection, documents).flatMap { producer =>
       collection.insert[JsObject](ordered, wc).many(producer.map(_.produce))
