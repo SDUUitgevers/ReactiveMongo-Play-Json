@@ -58,17 +58,20 @@ object BSONFormatsSpec extends org.specs2.mutable.Specification {
               // Even if default the subtype on read, always write it
 
               val explicitJsSubtpe = Json.toJson(Converters.hex2Str(
-                Array(Subtype.UserDefinedSubtype.value)))
+                Array(Subtype.UserDefinedSubtype.value)
+              ))
 
               Json.toJson(bin) must_== (baseObj + (
-                f"$$type" -> explicitJsSubtpe))
+                f"$$type" -> explicitJsSubtpe
+              ))
             }
           }
         }
 
         s"with explicit subtype ${Subtype.GenericBinarySubtype}" in {
           val hexaGeneric = Converters.hex2Str(
-            Array(Subtype.GenericBinarySubtype.value))
+            Array(Subtype.GenericBinarySubtype.value)
+          )
 
           val withTpe = baseObj + (f"$$type" -> Json.toJson(hexaGeneric))
 

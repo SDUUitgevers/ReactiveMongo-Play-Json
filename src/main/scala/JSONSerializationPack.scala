@@ -140,7 +140,7 @@ object JSONSerializationPack extends SerializationPack { self =>
 
   /** A builder for serialization simple values (useful for the commands) */
   private object Builder
-    extends SerializationPack.Builder[JSONSerializationPack.type] {
+      extends SerializationPack.Builder[JSONSerializationPack.type] {
     protected val pack = self
 
     def document(elements: Seq[ElementProducer]): Document =
